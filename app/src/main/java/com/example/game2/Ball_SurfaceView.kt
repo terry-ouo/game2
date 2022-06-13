@@ -6,6 +6,7 @@ import android.util.AttributeSet
 import android.view.SurfaceHolder
 import android.view.SurfaceView
 import com.example.game2.databinding.ActivityMainBinding
+import kotlinx.coroutines.delay
 
 
 class BallSurfaceView(context: Context?, attrs: AttributeSet?) : SurfaceView(context, attrs),
@@ -13,13 +14,13 @@ class BallSurfaceView(context: Context?, attrs: AttributeSet?) : SurfaceView(con
     lateinit var binding: ActivityMainBinding
     var myPaint = Paint()
     var surfaceHolder: SurfaceHolder = holder
-    var Ball: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.ball)
-    var Brick: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.green4)
-    var Brick2: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.orange4)
+    var ball: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.ball)
+    private var brick: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.green4)
+    private var brick2: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.orange4)
     var ballOrigX: Int = 400
     var ballOrigY: Int = 1000
-    var ballMoveX: Int = 8
-    var ballMoveY: Int = 8
+    var ballMoveX: Int = 0
+    var ballMoveY = 8
 
 
     init {
@@ -33,55 +34,20 @@ class BallSurfaceView(context: Context?, attrs: AttributeSet?) : SurfaceView(con
         drawSomething(canvas)
         surfaceHolder.unlockCanvasAndPost(canvas)
 
-
     }
 
     fun drawSomething(canvas: Canvas) {
-        var str: String = "123"
         canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR)
-        ballOrigX += ballMoveX
-        ballOrigY += ballMoveY
-        if (ballOrigX > 400) {
-            str = "123"
-        } else {
-            str = "345"
-        }
-//        canvas.drawBitmap(Ball, 500f, 500f, null)
-        detectX()
-        detectY()
-//        detectBrick()
         canvas.drawRGB(255, 228, 225)
-        canvas.drawBitmap(Ball, ballOrigX.toFloat(), ballOrigY.toFloat(), null)
-        canvas.drawBitmap(Brick, 20f, 0f, null)
-        canvas.drawBitmap(Brick2, 340f, 0f, null)
+//        canvas.drawBitmap(ball, ballOrigX.toFloat(), ballOrigY.toFloat(), null)
+        canvas.drawBitmap(brick, 20f, 0f, null)
+        canvas.drawBitmap(brick2, 340f, 0f, null)
         canvas.drawText("$ballOrigX  $ballOrigY", 500f, 1000f, myPaint)
+        ball(canvas)
 
     }
 
-    fun detectX() {
-        if (ballOrigX > width - Ball.width || ballOrigX <= 0) {
-            ballMoveX *= -1
-            ballMoveY = if (ballMoveY > 0) {
-                (7..12).random()
 
-            } else {
-                (7..12).random() * (-1)
-            }
-
-        }
-    }
-
-    fun detectY() {
-        if (ballOrigY > height - Ball.height || ballOrigY <= 0) {
-            ballMoveY *= -1
-            ballMoveX = if (ballMoveX > 0) {
-                (7..12).random()
-            } else {
-                (7..12).random() * (-1)
-            }
-
-        }
-    }
 
     override fun surfaceChanged(p0: SurfaceHolder, p1: Int, p2: Int, p3: Int) {
 
@@ -95,13 +61,37 @@ class BallSurfaceView(context: Context?, attrs: AttributeSet?) : SurfaceView(con
 
     }
 
-    fun detectBallTouchBrick() {
-        if (ballOrigX) {
+    //偵測是否超出邊框的範圍
+    private fun detectEdge() {
+        if (ballOrigX > width - ball.width || ballOrigX <= 0) {
+            ballMoveX *= -1
+            ballMoveY = if (ballMoveY > 0) {
+                (8..14).random()
+
+            } else {
+                (8..14).random() * (-1)
+            }
 
         }
-        if (ballOrigX){
+        if (ballOrigY > height - ball.height || ballOrigY <= 0) {
+            ballMoveY *= -1
+            ballMoveX = if (ballMoveX > 0) {
+                (8..14).random()
+            } else {
+                (8..14).random() * (-1)
+            }
 
         }
     }
+
+
+     private fun ball(canvas: Canvas) {
+        canvas.drawBitmap(ball, ballOrigX.toFloat(), ballOrigY.toFloat(), null)
+        ballOrigX += ballMoveX
+        ballOrigY += ballMoveY
+        detectEdge()
+        canvas.drawText("$ballOrigX  $ballOrigY", 500f, 1000f, myPaint)
+    }
+
 
 }
