@@ -22,13 +22,13 @@ class MainActivity : AppCompatActivity(),View.OnTouchListener {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        binding.button.text = "no touch"
+        binding.button.text = "開始"
         binding.img2.setOnTouchListener(this)
 
     }
 
     fun gameStatus(p0: View?) {
-        binding.button.text = "restart"
+        binding.button.text = "暫停"
         lateinit var ball: BallSurfaceView
         gameStatus = !gameStatus
         GlobalScope.launch(Dispatchers.Main) {
@@ -38,23 +38,24 @@ class MainActivity : AppCompatActivity(),View.OnTouchListener {
                 binding.ball.drawSomething(canvas)
                 binding.ball.holder.unlockCanvasAndPost(canvas)
                 binding.t1.text = binding.ball.ballOrigY.toString()
-                if (binding.ball.ballOrigY >= 1360){
+                if (binding.ball.ballOrigY >= 1330){
                     gameStatus = false
+                    binding.ball.ballOrigY = 1000
+                    binding.ball.ballOrigX = 400
+                    binding.button.text = "重新開始"
                 }
                 if (binding.ball.ballOrigX>paddlePosition && binding.ball.ballOrigX< paddlePosition+210 && binding.ball.ballOrigY >1100){
                     binding.ball.ballMoveY = (8..14).random() * (-1)
                 }
 
             }
-            binding.ball.ballOrigY = 1000
-            binding.ball.ballOrigX = 400
+
         }
 
     }
     override fun onTouch(v: View?, event: MotionEvent?): Boolean {
         if (event?.action == MotionEvent.ACTION_MOVE) {
             v?.x = event.rawX - v!!.width / 2
-            binding.txv.text = v.x.toString()
             paddlePosition = v.x.toInt()
         }
         return true
