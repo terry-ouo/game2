@@ -4,6 +4,7 @@ import android.graphics.Canvas
 import android.graphics.Rect
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.View
 import com.example.game2.databinding.ActivityMainBinding
@@ -11,12 +12,15 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.android.synthetic.main.activity_main.*
 import com.example.game2.BallSurfaceView
 
-class MainActivity : AppCompatActivity(),View.OnTouchListener {
+class MainActivity : AppCompatActivity(),View.OnTouchListener,
+    GestureDetector.OnGestureListener, GestureDetector.OnDoubleTapListener {
     lateinit var binding: ActivityMainBinding
     private var gameStatus = false
     var paddlePosition : Int = 0
+    lateinit var gDetector: GestureDetector
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,6 +28,8 @@ class MainActivity : AppCompatActivity(),View.OnTouchListener {
         setContentView(binding.root)
         binding.button.text = "開始"
         binding.img2.setOnTouchListener(this)
+        gDetector = GestureDetector(this, this)
+
 
     }
 
@@ -42,6 +48,8 @@ class MainActivity : AppCompatActivity(),View.OnTouchListener {
                     gameStatus = false
                     binding.ball.ballOrigY = 1000
                     binding.ball.ballOrigX = 400
+                    binding.ball.ballSpeed_min=8
+                    binding.ball.ballSpeed_min=15
                     binding.button.text = "重新開始"
                 }
                 if (binding.ball.ballOrigX>paddlePosition && binding.ball.ballOrigX< paddlePosition+210 && binding.ball.ballOrigY >1100){
@@ -50,6 +58,7 @@ class MainActivity : AppCompatActivity(),View.OnTouchListener {
 
             }
 
+            binding.button.text = "開始"
         }
 
     }
@@ -58,6 +67,46 @@ class MainActivity : AppCompatActivity(),View.OnTouchListener {
             v?.x = event.rawX - v!!.width / 2
             paddlePosition = v.x.toInt()
         }
+        gDetector.onTouchEvent(event)
+
+        return true
+    }
+
+    override fun onDown(p0: MotionEvent?): Boolean {
+        return true
+    }
+
+    override fun onShowPress(p0: MotionEvent?) {
+
+    }
+
+    override fun onSingleTapUp(p0: MotionEvent?): Boolean {
+        return true
+    }
+
+    override fun onScroll(p0: MotionEvent?, p1: MotionEvent?, p2: Float, p3: Float): Boolean {
+        return true
+    }
+
+    override fun onLongPress(p0: MotionEvent?) {
+
+    }
+
+    override fun onFling(p0: MotionEvent?, p1: MotionEvent?, p2: Float, p3: Float): Boolean {
+        return true
+    }
+
+    override fun onSingleTapConfirmed(p0: MotionEvent?): Boolean {
+        binding.ball.ballSpeed_min += 5
+        binding.ball.ballSpeed_max += 5
+        return true
+    }
+
+    override fun onDoubleTap(p0: MotionEvent?): Boolean {
+        return true
+    }
+
+    override fun onDoubleTapEvent(p0: MotionEvent?): Boolean {
         return true
     }
 }
