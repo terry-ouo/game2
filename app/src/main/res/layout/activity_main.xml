@@ -49,10 +49,11 @@
         android:id="@+id/img2"
         android:layout_width="105dp"
         android:layout_height="46dp"
+        android:layout_marginEnd="152dp"
         android:layout_marginBottom="92dp"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:srcCompat="@drawable/pic"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="160dp" />
+        tools:ignore="MissingConstraints" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
