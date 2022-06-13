@@ -45,7 +45,7 @@ class MainActivity : AppCompatActivity(),View.OnTouchListener {
                     binding.button.text = "重新開始"
                 }
                 if (binding.ball.ballOrigX>paddlePosition && binding.ball.ballOrigX< paddlePosition+210 && binding.ball.ballOrigY >1100){
-                    binding.ball.ballMoveY = (8..14).random() * (-1)
+                    binding.ball.ballMoveY = (binding.ball.ballSpeed_min..binding.ball.ballSpeed_max).random() * (-1)
                 }
 
             }

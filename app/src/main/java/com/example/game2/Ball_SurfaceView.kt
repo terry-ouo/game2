@@ -21,6 +21,8 @@ class BallSurfaceView(context: Context?, attrs: AttributeSet?) : SurfaceView(con
     var ballOrigY: Int = 1000
     var ballMoveX: Int = 0
     var ballMoveY = 8
+    var ballSpeed_max = 15
+    var ballSpeed_min = 8
 
 
     init {
@@ -66,19 +68,19 @@ class BallSurfaceView(context: Context?, attrs: AttributeSet?) : SurfaceView(con
         if (ballOrigX > width - ball.width || ballOrigX <= 0) {
             ballMoveX *= -1
             ballMoveY = if (ballMoveY > 0) {
-                (8..14).random()
+                (ballSpeed_min..ballSpeed_max).random()
 
             } else {
-                (8..14).random() * (-1)
+                (ballSpeed_min..ballSpeed_max).random() * (-1)
             }
 
         }
         if (ballOrigY > height - ball.height || ballOrigY <= 0) {
             ballMoveY *= -1
             ballMoveX = if (ballMoveX > 0) {
-                (8..14).random()
+                (ballSpeed_min..ballSpeed_max).random()
             } else {
-                (8..14).random() * (-1)
+                (ballSpeed_min..ballSpeed_max).random() * (-1)
             }
 
         }
