@@ -44,6 +44,27 @@ class CheckMenu : AppCompatActivity() {
                 }
         }
 
+        binding.search.setOnClickListener {
+            db.collection("Users")
+                .whereEqualTo("使用者名稱", binding.user.text.toString())
+                .get()
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        var msg: String = "查詢結果為:\n"
+                        for (document in task.result!!) {
+                            msg += "玩家名稱：" + document.data["使用者名稱"] +
+                                    "\n最佳通關用時:" + document.data["時間"].toString() + "秒\n\n"
+                        }
+                        if (msg != "查詢結果為:\n") {
+                            binding.txv.text = msg
+                        } else {
+                            binding.txv.text = "查詢結果為:\n查無資料"
+                        }
+                    }
+                }
+        }
+
+
     }
     fun changeView(view : View){
         startActivity(Intent(this, MainActivity::class.java))
