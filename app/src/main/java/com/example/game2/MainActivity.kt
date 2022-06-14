@@ -1,24 +1,23 @@
 package com.example.game2
 
+import android.content.Intent
 import android.graphics.Canvas
-import android.graphics.Rect
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.View
+import androidx.appcompat.app.AppCompatActivity
 import com.example.game2.databinding.ActivityMainBinding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlinx.android.synthetic.main.activity_main.*
-import com.example.game2.BallSurfaceView
 
 class MainActivity : AppCompatActivity(), View.OnTouchListener,
     GestureDetector.OnGestureListener, GestureDetector.OnDoubleTapListener {
     lateinit var binding: ActivityMainBinding
     private var gameStatus = false
+    private var gameEnd = false
     var paddlePosition: Int = 0
     lateinit var gDetector: GestureDetector
 
@@ -36,39 +35,50 @@ class MainActivity : AppCompatActivity(), View.OnTouchListener,
     }
 
     fun gameStatus(p0: View?) {
+
         binding.button.text = "暫停"
-        lateinit var ball: BallSurfaceView
         gameStatus = !gameStatus
         GlobalScope.launch(Dispatchers.Main) {
             while (gameStatus) {
+                if (gameEnd){
+                    binding.ball.ballSpeed_min = 8
+                    binding.ball.ballSpeed_min = 15
+                    binding.ball.ballOrigX = 400
+                    binding.ball.ballOrigY = 1000
+                    binding.ball.ballMoveX = 0
+                    binding.ball.ballMoveY = 8
+                    gameEnd = !gameEnd
+                }
                 delay(25)
                 val canvas: Canvas = binding.ball.holder.lockCanvas()
                 binding.ball.drawSomething(canvas)
                 binding.ball.holder.unlockCanvasAndPost(canvas)
-//                binding.t1.text = binding.ball.ballOrigY.toString()
-//                if (binding.ball.ballOrigY >= 1330) {
-//                    gameStatus = false
-//                    binding.ball.ballOrigY = 1000
-//                    binding.ball.ballOrigX = 400
-//                    binding.ball.ballMoveX = 0
-//                    binding.ball.ballMoveY = 8
-//                }
-                if (binding.ball.ballOrigX>paddlePosition && binding.ball.ballOrigX< paddlePosition+210 && binding.ball.ballOrigY >1100){
-                    binding.ball.ballMoveY = (binding.ball.ballSpeed_min..binding.ball.ballSpeed_max).random() * (-1)
+                //板子回彈
+                if ((binding.ball.ballOrigX > paddlePosition && binding.ball.ballOrigX < paddlePosition + 210) && (binding.ball.ballOrigY in 1100..1200)) {
+                    binding.ball.ballMoveY =
+                        (binding.ball.ballSpeed_min..binding.ball.ballSpeed_max).random() * (-1)
+                }
+                if (binding.ball.ballOrigY > 1300) {
+                    gameStatus = !gameStatus
+                    gameEnd = true
                 }
             }
-            binding.button.text = "開始"
-            binding.ball.ballSpeed_min = 8
-            binding.ball.ballSpeed_min = 15
+            if (gameEnd){
+                binding.button.text = "重新開始"
+            }else{
+                binding.button.text = "繼續"
+            }
+
+
         }
 
     }
+
 
     override fun onTouch(v: View?, event: MotionEvent?): Boolean {
         if (event?.action == MotionEvent.ACTION_MOVE) {
             v?.x = event.rawX - v!!.width / 2
             paddlePosition = v.x.toInt()
-            binding.t2.text=paddlePosition.toString()
         }
         gDetector.onTouchEvent(event)
 
@@ -111,5 +121,10 @@ class MainActivity : AppCompatActivity(), View.OnTouchListener,
 
     override fun onDoubleTapEvent(p0: MotionEvent?): Boolean {
         return true
+    }
+
+    fun changeView(view: View) {
+        gameStatus = false
+        startActivity(Intent(this, CheckMenu::class.java))
     }
 }

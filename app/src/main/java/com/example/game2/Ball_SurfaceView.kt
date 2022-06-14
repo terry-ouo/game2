@@ -67,6 +67,7 @@ class BallSurfaceView(context: Context?, attrs: AttributeSet?) : SurfaceView(con
 
     //偵測是否超出邊框的範圍
     private fun detectEdge() {
+        //左右
         if (ballOrigX > width - ball.width || ballOrigX <= 0) {
             ballMoveX *= -1
             ballMoveY = if (ballMoveY > 0) {
@@ -77,6 +78,7 @@ class BallSurfaceView(context: Context?, attrs: AttributeSet?) : SurfaceView(con
             }
 
         }
+        //上下
         if (ballOrigY > height - ball.height || ballOrigY <= 0) {
             ballMoveY *= -1
             ballMoveX = if (ballMoveX > 0) {
