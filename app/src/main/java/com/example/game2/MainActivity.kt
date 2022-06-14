@@ -37,7 +37,7 @@ class MainActivity : AppCompatActivity(), View.OnTouchListener,
 
         binding.btnUpdate.setOnClickListener {
             user["使用者名稱"] = binding.user.text.toString()
-            user["時間"] = 123
+            user["時間"] = 223
             db.collection("Users")
                 .document(binding.user.text.toString())
                 .set(user)
@@ -49,7 +49,7 @@ class MainActivity : AppCompatActivity(), View.OnTouchListener,
                 }
                 .addOnFailureListener { e ->
                     Toast.makeText(
-                        this, "上傳資料失敗：" + e.toString(),
+                        this, "上傳資料失敗：$e",
                         Toast.LENGTH_LONG
                     ).show()
                 }

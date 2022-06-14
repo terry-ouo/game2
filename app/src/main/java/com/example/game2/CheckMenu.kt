@@ -24,7 +24,7 @@ class CheckMenu : AppCompatActivity() {
 
         binding.btnrank.setOnClickListener {
             db.collection("Users")
-                .orderBy("時間", Query.Direction.DESCENDING)
+                .orderBy("時間", Query.Direction.ASCENDING)
                 .limit(3)
                 .get()
                 .addOnCompleteListener { task ->

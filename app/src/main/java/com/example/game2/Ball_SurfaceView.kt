@@ -15,7 +15,7 @@ class BallSurfaceView(context: Context?, attrs: AttributeSet?) : SurfaceView(con
     var myPaint = Paint()
     var surfaceHolder: SurfaceHolder = holder
     var ball: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.ball)
-    var background : Bitmap = BitmapFactory.decodeResource(resources,R.drawable.bg)
+    var background: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.bg)
     private var brick: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.green4)
     private var brick2: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.orange4)
     var ballOrigX: Int = 400
@@ -46,11 +46,10 @@ class BallSurfaceView(context: Context?, attrs: AttributeSet?) : SurfaceView(con
 //        canvas.drawBitmap(ball, ballOrigX.toFloat(), ballOrigY.toFloat(), null)
         canvas.drawBitmap(brick, 20f, 0f, null)
         canvas.drawBitmap(brick2, 340f, 0f, null)
-        canvas.drawText("$ballOrigX  $ballOrigY", 500f, 1000f, myPaint)
+//       canvas.drawText("$ballOrigX  $ballOrigY", 500f, 1000f, myPaint)
         ball(canvas)
 
     }
-
 
 
     override fun surfaceChanged(p0: SurfaceHolder, p1: Int, p2: Int, p3: Int) {
@@ -91,12 +90,12 @@ class BallSurfaceView(context: Context?, attrs: AttributeSet?) : SurfaceView(con
     }
 
 
-     private fun ball(canvas: Canvas) {
+    private fun ball(canvas: Canvas) {
         canvas.drawBitmap(ball, ballOrigX.toFloat(), ballOrigY.toFloat(), null)
         ballOrigX += ballMoveX
         ballOrigY += ballMoveY
         detectEdge()
-        canvas.drawText("$ballOrigX  $ballOrigY", 500f, 1000f, myPaint)
+//        canvas.drawText("$ballOrigX  $ballOrigY", 500f, 1000f, myPaint)
     }
 
 
