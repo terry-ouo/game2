@@ -15,6 +15,7 @@ class BallSurfaceView(context: Context?, attrs: AttributeSet?) : SurfaceView(con
     var myPaint = Paint()
     var surfaceHolder: SurfaceHolder = holder
     var ball: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.ball)
+    var background : Bitmap = BitmapFactory.decodeResource(resources,R.drawable.bg)
     private var brick: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.green4)
     private var brick2: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.orange4)
     var ballOrigX: Int = 400
@@ -40,7 +41,8 @@ class BallSurfaceView(context: Context?, attrs: AttributeSet?) : SurfaceView(con
 
     fun drawSomething(canvas: Canvas) {
         canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR)
-        canvas.drawRGB(255, 228, 225)
+        canvas.drawBitmap(background, 0f, 0f, null)
+        //canvas.drawRGB(255, 228, 225)
 //        canvas.drawBitmap(ball, ballOrigX.toFloat(), ballOrigY.toFloat(), null)
         canvas.drawBitmap(brick, 20f, 0f, null)
         canvas.drawBitmap(brick2, 340f, 0f, null)

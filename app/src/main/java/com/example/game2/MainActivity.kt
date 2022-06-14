@@ -45,17 +45,16 @@ class MainActivity : AppCompatActivity(), View.OnTouchListener,
                 val canvas: Canvas = binding.ball.holder.lockCanvas()
                 binding.ball.drawSomething(canvas)
                 binding.ball.holder.unlockCanvasAndPost(canvas)
-                binding.t1.text = binding.ball.ballOrigY.toString()
-                if (binding.ball.ballOrigY >= 1330) {
-                    gameStatus = false
-                    binding.ball.ballOrigY = 1000
-                    binding.ball.ballOrigX = 400
-                    binding.ball.ballMoveX = 0
-                    binding.ball.ballMoveY = 8
-                }
-                if (binding.ball.ballOrigX > paddlePosition && binding.ball.ballOrigX < paddlePosition + 210 && binding.ball.ballOrigY > 1200 && binding.ball.ballOrigY < 1150) {
-                    binding.ball.ballMoveY =
-                        (binding.ball.ballSpeed_min..binding.ball.ballSpeed_max).random() * (-1)
+//                binding.t1.text = binding.ball.ballOrigY.toString()
+//                if (binding.ball.ballOrigY >= 1330) {
+//                    gameStatus = false
+//                    binding.ball.ballOrigY = 1000
+//                    binding.ball.ballOrigX = 400
+//                    binding.ball.ballMoveX = 0
+//                    binding.ball.ballMoveY = 8
+//                }
+                if (binding.ball.ballOrigX>paddlePosition && binding.ball.ballOrigX< paddlePosition+210 && binding.ball.ballOrigY >1100){
+                    binding.ball.ballMoveY = (binding.ball.ballSpeed_min..binding.ball.ballSpeed_max).random() * (-1)
                 }
             }
             binding.button.text = "開始"
@@ -69,6 +68,7 @@ class MainActivity : AppCompatActivity(), View.OnTouchListener,
         if (event?.action == MotionEvent.ACTION_MOVE) {
             v?.x = event.rawX - v!!.width / 2
             paddlePosition = v.x.toInt()
+            binding.t2.text=paddlePosition.toString()
         }
         gDetector.onTouchEvent(event)
 
