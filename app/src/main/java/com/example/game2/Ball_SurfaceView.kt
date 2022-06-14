@@ -15,8 +15,11 @@ class BallSurfaceView(context: Context?, attrs: AttributeSet?) : SurfaceView(con
     var myPaint = Paint()
     var surfaceHolder: SurfaceHolder = holder
     var ball: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.ball)
-    private var brick: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.green4)
+    private var brick1: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.green4)
     private var brick2: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.orange4)
+    private var brick3: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.blue4)
+    private var brick4: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.yellow4)
+    private var brick5: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.red4)
     var ballOrigX: Int = 400
     var ballOrigY: Int = 1000
     var ballMoveX: Int = 0
@@ -42,8 +45,14 @@ class BallSurfaceView(context: Context?, attrs: AttributeSet?) : SurfaceView(con
         canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR)
         canvas.drawRGB(255, 228, 225)
 //        canvas.drawBitmap(ball, ballOrigX.toFloat(), ballOrigY.toFloat(), null)
-        canvas.drawBitmap(brick, 20f, 0f, null)
-        canvas.drawBitmap(brick2, 340f, 0f, null)
+        canvas.drawBitmap(brick1, 90f, 0f, null)    //green
+        canvas.drawBitmap(brick2, 330f, 0f, null)   //orange
+        canvas.drawBitmap(brick3, 570f, 0f, null)   //blue
+        canvas.drawBitmap(brick4, 210f, 60f, null)  //yellow
+        canvas.drawBitmap(brick5, 450f, 60f, null)  //red
+        canvas.drawBitmap(brick3, 330f, 120f, null) //blue
+
+
         canvas.drawText("$ballOrigX  $ballOrigY", 500f, 1000f, myPaint)
         ball(canvas)
 
@@ -93,6 +102,12 @@ class BallSurfaceView(context: Context?, attrs: AttributeSet?) : SurfaceView(con
         ballOrigY += ballMoveY
         detectEdge()
         canvas.drawText("$ballOrigX  $ballOrigY", 500f, 1000f, myPaint)
+    }
+
+    fun detectBrich(){
+        if ((ballOrigX<2 && ballOrigX<2) && ballOrigY <=2){ //brick1
+
+        }
     }
 
 
