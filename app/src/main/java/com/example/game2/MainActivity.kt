@@ -6,8 +6,10 @@ import android.os.Bundle
 import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.game2.databinding.ActivityMainBinding
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
@@ -19,6 +21,8 @@ class MainActivity : AppCompatActivity(), View.OnTouchListener,
     private var gameStatus = false
     private var gameEnd = false
     var paddlePosition: Int = 0
+    var db = FirebaseFirestore.getInstance()
+    var user: MutableMap<String, Any> = HashMap()
     lateinit var gDetector: GestureDetector
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,7 +35,25 @@ class MainActivity : AppCompatActivity(), View.OnTouchListener,
         binding.img2.setOnTouchListener(this)
         gDetector = GestureDetector(this, this)
 
-
+        binding.btnUpdate.setOnClickListener {
+            user["使用者名稱"] = binding.user.text.toString()
+            user["時間"] = 123
+            db.collection("Users")
+                .document(binding.user.text.toString())
+                .set(user)
+                .addOnSuccessListener {
+                    Toast.makeText(
+                        this, "上傳資料成功",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+                .addOnFailureListener { e ->
+                    Toast.makeText(
+                        this, "上傳資料失敗：" + e.toString(),
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+        }
     }
 
     fun gameStatus(p0: View?) {
@@ -126,5 +148,6 @@ class MainActivity : AppCompatActivity(), View.OnTouchListener,
     fun changeView(view: View) {
         gameStatus = false
         startActivity(Intent(this, CheckMenu::class.java))
+
     }
 }
