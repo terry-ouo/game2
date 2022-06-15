@@ -89,7 +89,6 @@ class BallSurfaceView(context: Context?, attrs: AttributeSet?) : SurfaceView(con
             } else {
                 (ballSpeed_min..ballSpeed_max).random() * (-1)
             }
-
         }
         //上下
         if (ballOrigY > height - ball.height || ballOrigY <= 0) {
@@ -111,9 +110,6 @@ class BallSurfaceView(context: Context?, attrs: AttributeSet?) : SurfaceView(con
         //canvas.drawText("$ballOrigX  $ballOrigY", 500f, 1000f, myPaint)
     }
 
-    fun detectBrick() {
-
-    }
 
     fun createBreakBrick(canvas: Canvas) {
         //first line green block

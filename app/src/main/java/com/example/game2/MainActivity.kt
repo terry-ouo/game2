@@ -18,6 +18,7 @@ class MainActivity : AppCompatActivity(), View.OnTouchListener,
     private var gameStatus = false
     private var gameEnd = false
     var paddlePosition: Int = 0
+    var secondsCount:Int = 0    //計時
     var db = FirebaseFirestore.getInstance()
     var user: MutableMap<String, Any> = HashMap()
     lateinit var gDetector: GestureDetector
@@ -27,16 +28,19 @@ class MainActivity : AppCompatActivity(), View.OnTouchListener,
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+
         binding.button.text = "開始"
         binding.ball.ballSpeed_min = 8
         binding.ball.ballSpeed_min = 15
         binding.img2.setOnTouchListener(this)
         gDetector = GestureDetector(this, this)
+        binding.time.text = secondsCount.toString()
+
 
         //上傳使用者資料
         binding.btnUpdate.setOnClickListener {
             user["使用者名稱"] = binding.user.text.toString()
-            user["時間"] = 223
+            user["時間"] = binding.time.text.toString()
             db.collection("Users")
                 .document(binding.user.text.toString())
                 .set(user)
@@ -57,15 +61,18 @@ class MainActivity : AppCompatActivity(), View.OnTouchListener,
 
 
     fun gameStatus(p0: View?) {
-
         binding.button.text = "暫停"
         gameStatus = !gameStatus    //=0
         GlobalScope.launch(Dispatchers.Main) {
             while (gameStatus) {    //遊戲開始 = 0
+                //計時
+                secondsCount++
+                binding.time.text = (secondsCount/35).toString()
+                //遊戲結束判斷
                 if (binding.ball.countBrick == 0) {
                     gameStatus = false
                 }
-                if (gameEnd) {       //遊戲結束判斷 = 2
+                if (gameEnd) {
                     gameStatus = false
                 }
                 delay(25)
@@ -98,14 +105,12 @@ class MainActivity : AppCompatActivity(), View.OnTouchListener,
                 binding.ball.detectBrick5 = true
                 binding.ball.detectBrick6 = true
                 binding.ball.countBrick = 6
+                secondsCount = 0
                 gameEnd = !gameEnd
             } else {
                 binding.button.text = "繼續"
             }
-
-
         }
-
     }
 
 
@@ -160,6 +165,5 @@ class MainActivity : AppCompatActivity(), View.OnTouchListener,
     fun changeView(view: View) {
         gameStatus = false
         startActivity(Intent(this, CheckMenu::class.java))
-
     }
 }
