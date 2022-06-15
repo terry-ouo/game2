@@ -4,7 +4,15 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/AndroidStudioProjects/Game2/app/src/main/res/layout/activity_main.xml" value="0.22" />
-        <entry key="..\:/AndroidStudioProjects/game2/app/src/main/res/layout/activity_main.xml" value="0.35733695652173914" />
+        <entry key="..\:/AndroidStudioProjects/game2/app/src/main/res/layout/activity_check_menu.xml" value="0.33" />
+        <entry key="..\:/AndroidStudioProjects/game2/app/src/main/res/layout/activity_main.xml" value="0.33" />
+        <entry key="..\:/AndroidStudioProjects/game2/app/src/main/res/layout/check.xml" value="0.35733695652173914" />
+        <entry key="..\:/AndroidStudioProjects/game2/app/src/main/res/layout/check_menu.xml" value="0.35733695652173914" />
+        <entry key="..\:/AndroidStudioProjects/game2/app/src/main/res/xml/check.xml" value="0.35733695652173914" />
+        <entry key="..\:/Users/ego37/AndroidStudioProjects/game2/app/src/main/res/layout/activity_check_menu.xml" value="0.22826086956521738" />
+        <entry key="..\:/Users/ego37/AndroidStudioProjects/game2/app/src/main/res/layout/activity_main.xml" value="0.22826086956521738" />
+        <entry key="..\:/Users/zon52/AndroidStudioProjects/game2/app/src/main/res/layout/activity_check_menu.xml" value="0.559375" />
+        <entry key="..\:/Users/zon52/AndroidStudioProjects/game2/app/src/main/res/layout/activity_main.xml" value="0.559375" />
       </map>
     </option>
   </component>

@@ -1,69 +1,113 @@
 package com.example.game2
 
+import android.content.Intent
 import android.graphics.Canvas
-import android.graphics.Rect
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.View
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.example.game2.databinding.ActivityMainBinding
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import kotlinx.android.synthetic.main.activity_main.*
-import com.example.game2.BallSurfaceView
+import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.*
 
 class MainActivity : AppCompatActivity(), View.OnTouchListener,
     GestureDetector.OnGestureListener, GestureDetector.OnDoubleTapListener {
     lateinit var binding: ActivityMainBinding
     private var gameStatus = false
+    private var gameEnd = false
     var paddlePosition: Int = 0
+    var db = FirebaseFirestore.getInstance()
+    var user: MutableMap<String, Any> = HashMap()
     lateinit var gDetector: GestureDetector
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
         binding.button.text = "開始"
         binding.ball.ballSpeed_min = 8
         binding.ball.ballSpeed_min = 15
         binding.img2.setOnTouchListener(this)
         gDetector = GestureDetector(this, this)
 
-
+        //上傳使用者資料
+        binding.btnUpdate.setOnClickListener {
+            user["使用者名稱"] = binding.user.text.toString()
+            user["時間"] = 223
+            db.collection("Users")
+                .document(binding.user.text.toString())
+                .set(user)
+                .addOnSuccessListener {
+                    Toast.makeText(
+                        this, "上傳資料成功",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+                .addOnFailureListener { e ->
+                    Toast.makeText(
+                        this, "上傳資料失敗：$e",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+        }
     }
 
+
     fun gameStatus(p0: View?) {
+
         binding.button.text = "暫停"
-        lateinit var ball: BallSurfaceView
-        gameStatus = !gameStatus
+        gameStatus = !gameStatus    //=0
         GlobalScope.launch(Dispatchers.Main) {
-            while (gameStatus) {
+            while (gameStatus) {    //遊戲開始 = 0
+                if (binding.ball.countBrick == 0) {
+                    gameStatus = false
+                }
+                if (gameEnd) {       //遊戲結束判斷 = 2
+                    gameStatus = false
+                }
                 delay(25)
                 val canvas: Canvas = binding.ball.holder.lockCanvas()
                 binding.ball.drawSomething(canvas)
                 binding.ball.holder.unlockCanvasAndPost(canvas)
-                binding.t1.text = binding.ball.ballOrigY.toString()
-                if (binding.ball.ballOrigY >= 1330) {
-                    gameStatus = false
-                    binding.ball.ballOrigY = 1000
-                    binding.ball.ballOrigX = 400
-                    binding.ball.ballMoveX = 0
-                    binding.ball.ballMoveY = 8
-                }
-                if (binding.ball.ballOrigX > paddlePosition && binding.ball.ballOrigX < paddlePosition + 210 && binding.ball.ballOrigY > 1200 && binding.ball.ballOrigY < 1150) {
+                //板子回彈
+                if ((binding.ball.ballOrigX > paddlePosition && binding.ball.ballOrigX < paddlePosition + 210) && (binding.ball.ballOrigY in 1100..1200)) {
                     binding.ball.ballMoveY =
                         (binding.ball.ballSpeed_min..binding.ball.ballSpeed_max).random() * (-1)
                 }
+                if (binding.ball.ballOrigY > 1300 || binding.ball.countBrick == 0) {    //球觸底 && 方塊全破壞
+                    gameStatus = !gameStatus    //結束
+                    gameEnd = true
+                }
+
             }
-            binding.button.text = "開始"
-            binding.ball.ballSpeed_min = 8
-            binding.ball.ballSpeed_min = 15
+            if (gameEnd) {   //2
+                binding.button.text = "重新開始"
+                binding.ball.ballSpeed_min = 8
+                binding.ball.ballSpeed_min = 15
+                binding.ball.ballOrigX = 400
+                binding.ball.ballOrigY = 1000
+                binding.ball.ballMoveX = 0
+                binding.ball.ballMoveY = 8
+                binding.ball.detectBrick1 = true
+                binding.ball.detectBrick2 = true
+                binding.ball.detectBrick3 = true
+                binding.ball.detectBrick4 = true
+                binding.ball.detectBrick5 = true
+                binding.ball.detectBrick6 = true
+                binding.ball.countBrick = 6
+                gameEnd = !gameEnd
+            } else {
+                binding.button.text = "繼續"
+            }
+
+
         }
 
     }
+
 
     override fun onTouch(v: View?, event: MotionEvent?): Boolean {
         if (event?.action == MotionEvent.ACTION_MOVE) {
@@ -111,5 +155,11 @@ class MainActivity : AppCompatActivity(), View.OnTouchListener,
 
     override fun onDoubleTapEvent(p0: MotionEvent?): Boolean {
         return true
+    }
+
+    fun changeView(view: View) {
+        gameStatus = false
+        startActivity(Intent(this, CheckMenu::class.java))
+
     }
 }
